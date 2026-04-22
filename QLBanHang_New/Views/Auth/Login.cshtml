@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="auth-container">
+
+    <h2>🔐 Đăng nhập</h2>
+
+    <form method="post">
+
+        @Html.AntiForgeryToken()
+
+        <!-- USERNAME -->
+        <input name="username"
+               value="@ViewBag.Username"
+               placeholder="Tài khoản"
+               class="auth-input"
+               required />
+
+        <!-- PASSWORD -->
+        <input name="password"
+               type="password"
+               placeholder="Mật khẩu"
+               class="auth-input"
+               required />
+
+        <button class="auth-btn">Đăng nhập</button>
+
+        <!-- ERROR -->
+        @if (ViewBag.Error != null)
+        {
+            <div class="auth-error">@ViewBag.Error</div>
+        }
+
+    </form>
+
+    <a href="/Auth/Register" class="auth-link">
+        Chưa có tài khoản? Đăng ký
+    </a>
+
+</div>

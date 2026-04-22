@@ -1,0 +1,124 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    var user = Context.Session.GetString("User") ?? "Admin";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - QLBanHang</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <!-- 🔥 FIX LAYOUT -->
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background: #f5f5f5;
+        }
+
+        /* NAVBAR DÍNH TRÊN */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* CONTENT */
+        .main-content {
+            flex: 1;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #fff;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black shadow">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/Admin">
+                ⚙ ADMIN
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="adminMenu">
+
+                <!-- MENU -->
+                <ul class="navbar-nav me-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin">📦 SẢN PHẨM</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Order">📋 ĐƠN HÀNG</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin/ThongKe">📊 THỐNG KÊ</a>
+                    </li>
+
+                </ul>
+
+                <!-- USER -->
+                <ul class="navbar-nav">
+
+                    <li class="nav-item">
+                        <span class="nav-link text-info">
+                            👤 @user
+                        </span>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="/Auth/Logout">
+                            ĐĂNG XUẤT
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="main-content container mt-4">
+        @RenderBody()
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="text-center p-3">
+        <p class="mb-0">
+            © 2024 - QLBanHang - Đinh Nguyễn Nguyên |
+            Gmail: Nguyen204apl@gmail.com |
+            SDT: 0983547037
+        </p>
+    </footer>
+
+    <!-- SCRIPT -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

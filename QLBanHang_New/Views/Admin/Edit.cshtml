@@ -1,0 +1,149 @@
+﻿@model QLBanHang_New.Models.Product
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card border-0 shadow-lg p-4 rounded-4">
+
+    <!-- HEADER -->
+    <div class="mb-4">
+        <h3 class="fw-bold">✏️ Sửa sản phẩm</h3>
+        <p class="text-muted">Cập nhật thông tin sản phẩm</p>
+    </div>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+        @Html.AntiForgeryToken()
+
+        <!-- HIỂN THỊ LỖI -->
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <!-- ID -->
+        <input type="hidden" asp-for="ProductId" />
+
+        <!-- GIỮ ẢNH CŨ -->
+        <input type="hidden" asp-for="ImageUrl" />
+
+        <div class="row">
+
+            <!-- LEFT -->
+            <div class="col-md-7">
+
+                <!-- TÊN -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Tên sản phẩm</label>
+                    <input asp-for="ProductName"
+                           class="form-control form-control-lg"
+                           required />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+
+                <!-- GIÁ + STOCK -->
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Giá</label>
+                        <input asp-for="Price"
+                               type="number"
+                               class="form-control"
+                               min="0"
+                               required />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Số lượng</label>
+                        <input asp-for="Stock"
+                               type="number"
+                               class="form-control"
+                               min="0"
+                               required />
+                        <span asp-validation-for="Stock" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <!-- ✅ CATEGORY CHUẨN -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Danh mục</label>
+
+                    <select asp-for="CategoryId"
+                            asp-items="ViewBag.Categories"
+                            class="form-select">
+                        <option value="">-- Chọn danh mục --</option>
+                    </select>
+
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+
+                    <!-- nhập category mới -->
+                    <input type="text"
+                           name="NewCategory"
+                           class="form-control mt-2"
+                           placeholder="Hoặc nhập danh mục mới..." />
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Mô tả</label>
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="4"></textarea>
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="col-md-5">
+
+                <div class="border rounded-4 p-3 text-center bg-light">
+
+                    <label class="form-label fw-semibold">Ảnh sản phẩm</label>
+
+                    <!-- INPUT FILE -->
+                    <input type="file"
+                           name="imageFile"
+                           class="form-control mb-3"
+                           id="imgInput" />
+
+                    <!-- PREVIEW -->
+                    <img id="previewImg"
+                         src="@(string.IsNullOrEmpty(Model.ImageUrl)
+                                                         ? "/images/no-image.png"
+                                                         : "/images/" + Model.ImageUrl)"
+                         class="img-fluid rounded shadow-sm"
+                         style="max-height:250px;object-fit:cover;" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BUTTON -->
+        <div class="mt-4 d-flex gap-3">
+            <button type="submit" class="btn btn-warning px-4 shadow-sm">
+                💾 Cập nhật
+            </button>
+
+            <a href="/Admin" class="btn btn-outline-secondary px-4">
+                ⬅ Quay lại
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById("imgInput").onchange = function () {
+            const [file] = this.files;
+            if (file) {
+                document.getElementById("previewImg").src = URL.createObjectURL(file);
+            }
+        };
+    </script>
+}

@@ -1,0 +1,16 @@
+﻿# ===== BUILD =====
+bin/
+obj/
+
+# ===== VISUAL STUDIO =====
+.vs/
+*.user
+*.suo
+*.log
+
+# ===== CONFIG =====
+appsettings.Development.json
+
+# ===== IMAGE =====
+wwwroot/images/*
+!wwwroot/images/no-image.png

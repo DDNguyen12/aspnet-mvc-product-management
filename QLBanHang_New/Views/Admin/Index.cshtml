@@ -1,0 +1,122 @@
+﻿@model List<QLBanHang_New.Models.Product>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card border-0 shadow-lg p-4 rounded-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+
+        <div>
+            <h3 class="fw-bold m-0">📦 Quản lý sản phẩm</h3>
+            <small class="text-muted">Quản lý toàn bộ sản phẩm trong hệ thống</small>
+        </div>
+
+        <div class="d-flex gap-2">
+            <!-- 🔥 EXPORT EXCEL -->
+            <a href="/Admin/ExportExcel"
+               class="btn btn-outline-success px-4 rounded-pill shadow-sm">
+                📥 Excel
+            </a>
+
+            <a href="/Admin/Create"
+               class="btn btn-success px-4 rounded-pill shadow-sm">
+                ➕ Thêm mới
+            </a>
+        </div>
+
+    </div>
+
+    <!-- SEARCH -->
+    <form method="get" class="d-flex mb-4" style="max-width:400px;">
+        <input name="search"
+               value="@Context.Request.Query["search"]"
+               class="form-control rounded-start-pill"
+               placeholder="🔍 Tìm sản phẩm..." />
+
+        <button class="btn btn-dark rounded-end-pill px-4">
+            Tìm
+        </button>
+    </form>
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+
+        <table class="table align-middle table-hover">
+
+            <thead class="bg-dark text-white text-center">
+                <tr>
+                    <th>Ảnh</th>
+                    <th class="text-start">Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr class="border-bottom text-center">
+
+                        <!-- IMAGE -->
+                        <td>
+                            <img src="/images/@(item.ImageUrl ?? "no-image.png")"
+                                 style="width:70px;height:70px;object-fit:cover;border-radius:12px;"
+                                 class="shadow-sm" />
+                        </td>
+
+                        <!-- NAME -->
+                        <td class="fw-semibold text-start">
+                            @(item.ProductName ?? "Không tên")
+                        </td>
+
+                        <!-- PRICE -->
+                        <td class="text-danger fw-bold">
+                            @String.Format("{0:N0}", item.Price) VND
+                        </td>
+
+                        <!-- ACTION -->
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+
+                                <a href="/Admin/Edit/@item.ProductId"
+                                   class="btn btn-warning btn-sm rounded-circle shadow-sm d-flex align-items-center justify-content-center"
+                                   style="width:36px;height:36px;">
+                                    ✏️
+                                </a>
+
+                                <form asp-action="Delete" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.ProductId" />
+
+                                    <button onclick="return confirm('Xóa sản phẩm này?')"
+                                            class="btn btn-dark btn-sm rounded-circle shadow-sm d-flex align-items-center justify-content-center"
+                                            style="width:36px;height:36px;">
+                                        🗑️
+                                    </button>
+                                </form>
+
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- EMPTY -->
+    @if (!Model.Any())
+    {
+        <div class="text-center text-muted mt-4">
+            🚫 Không có sản phẩm nào
+        </div>
+    }
+
+</div>

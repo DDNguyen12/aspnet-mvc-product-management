@@ -1,0 +1,129 @@
+﻿@model List<QLBanHang_New.Models.Order>
+
+@using Microsoft.AspNetCore.Http
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var roleStr = Context.Session.GetString("Role");
+    int role = string.IsNullOrEmpty(roleStr) ? 999 : int.Parse(roleStr);
+
+    var list = Model ?? new List<QLBanHang_New.Models.Order>();
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4 fw-bold">📦 Danh sách đơn hàng</h2>
+
+    @if (!list.Any())
+    {
+        <div class="alert alert-info text-center">
+            Bạn chưa có đơn hàng nào
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0 p-3">
+
+            <table class="table align-middle table-hover">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Ngày</th>
+                        <th>Tổng tiền</th>
+                        <th>Thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in list)
+                    {
+                        string status = item.Status ?? "Chưa xử lý";
+                        string payment = item.PaymentMethod ?? "COD";
+
+                        string badge = "bg-secondary";
+
+                        if (status == "Chờ xử lý")
+                            badge = "bg-warning text-dark";
+                        else if (status == "Đã xử lý")
+                            badge = "bg-success";
+                        else if (status == "Đã hủy")
+                            badge = "bg-danger";
+
+                        <tr>
+                            <td class="fw-bold">#@item.OrderId</td>
+
+                            <td>
+                                @item.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td class="text-danger fw-bold">
+                                @String.Format("{0:N0}", item.TotalAmount) VND
+                            </td>
+
+                            <!-- 🔥 PAYMENT -->
+                            <td>
+                                <span class="badge bg-info text-dark">
+                                    @payment
+                                </span>
+                            </td>
+
+                            <!-- STATUS -->
+                            <td>
+                                <span class="badge @badge px-3 py-2">
+                                    @status
+                                </span>
+                            </td>
+
+                            <!-- ACTION -->
+                            <td class="text-center d-flex justify-content-center gap-1">
+
+                                <!-- XEM -->
+                                <a href="/Order/Detail/@item.OrderId"
+                                   class="btn btn-dark btn-sm">
+                                    🔍
+                                </a>
+
+                                <!-- 🔥 ADMIN DUYỆT -->
+                                @if (role <= 2 && status == "Chờ xử lý")
+                                {
+                                    <form method="post" action="/Order/Approve">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.OrderId" />
+                                        <button class="btn btn-success btn-sm">
+                                            ✔
+                                        </button>
+                                    </form>
+
+                                    <form method="post" action="/Order/Cancel">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.OrderId" />
+                                        <button class="btn btn-danger btn-sm">
+                                            ✖
+                                        </button>
+                                    </form>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+    <!-- BACK -->
+    <div class="mt-3">
+        <a href="/" class="btn btn-outline-secondary">
+            ⬅ Trang chủ
+        </a>
+    </div>
+
+</div>

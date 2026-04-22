@@ -1,0 +1,56 @@
+﻿@model QLBanHang_New.Models.User
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="auth-container">
+
+    <h2>📝 Đăng ký</h2>
+
+    <form method="post">
+
+        @Html.AntiForgeryToken()
+
+        <!-- USERNAME -->
+        <input asp-for="Username"
+               class="auth-input"
+               placeholder="Tài khoản"
+               required />
+
+        <!-- PASSWORD -->
+        <input asp-for="Password"
+               type="password"
+               class="auth-input"
+               placeholder="Mật khẩu"
+               required />
+
+        <!-- CONFIRM PASSWORD -->
+        <input type="password"
+               name="confirmPassword"
+               class="auth-input"
+               placeholder="Nhập lại mật khẩu"
+               required />
+
+        <!-- FULLNAME -->
+        <input asp-for="FullName"
+               class="auth-input"
+               placeholder="Họ tên" />
+
+        <!-- ERROR -->
+        @if (ViewBag.Error != null)
+        {
+            <div class="auth-error">@ViewBag.Error</div>
+        }
+
+        <button class="auth-btn" style="background:#198754">
+            Đăng ký
+        </button>
+
+    </form>
+
+    <a href="/Auth/Login" class="auth-link">
+        Đã có tài khoản? Đăng nhập
+    </a>
+
+</div>

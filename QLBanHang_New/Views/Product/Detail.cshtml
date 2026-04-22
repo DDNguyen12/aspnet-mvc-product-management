@@ -1,0 +1,76 @@
+﻿@model QLBanHang_New.Models.Product
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model == null)
+{
+    <div class="container mt-5 text-center">
+        <h3 class="text-danger">❌ Không tìm thấy sản phẩm</h3>
+        <a href="/Product" class="btn btn-secondary mt-3">⬅ Quay lại</a>
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+
+        <div class="card border-0 shadow-lg p-4 rounded-4">
+
+            <div class="row">
+
+                <!-- IMAGE -->
+                <div class="col-md-5 text-center">
+                    <img src="@(string.IsNullOrEmpty(Model.ImageUrl)
+                                                         ? "/images/no-image.png"
+                                                         : "/images/" + Model.ImageUrl)"
+                                                                                       class="img-fluid rounded shadow-sm"
+                                                                                       style="max-height:350px;object-fit:cover;" />
+                                                                              </div>
+
+                <!-- INFO -->
+                <div class="col-md-7">
+
+                    <h2 class="fw-bold mb-2">
+                        @(Model.ProductName ?? "Không tên")
+                    </h2>
+
+                    <h3 class="text-danger fw-bold mb-3">
+                        @String.Format("{0:N0}", Model.Price) VND
+                    </h3>
+
+                    <p class="text-muted mb-3">
+                        @(string.IsNullOrEmpty(Model.Description)
+                                            ? "Chưa có mô tả cho sản phẩm này."
+                                            : Model.Description)
+                </p>
+
+                    <p class="mb-3">
+                        <span class="badge bg-success px-3 py-2">
+                            Còn lại: @Model.Stock sản phẩm
+                        </span>
+                    </p>
+
+                    <!-- BUTTON -->
+                    <div class="d-flex gap-3">
+
+                        <a href="/Cart/Add?productId=@Model.ProductId"
+                           class="btn btn-dark px-4">
+                            🛒 Thêm vào giỏ
+                        </a>
+
+                        <a href="/Product"
+                           class="btn btn-outline-secondary px-4">
+                            ⬅ Quay lại
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}

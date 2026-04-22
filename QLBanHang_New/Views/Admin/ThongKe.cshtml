@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4 fw-bold">📊 Thống kê hệ thống</h2>
+
+    <div class="row g-4">
+
+        <!-- Tổng sản phẩm -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Tổng sản phẩm</h5>
+                <h3 class="text-primary">@ViewBag.Total</h3>
+            </div>
+        </div>
+
+        <!-- Tổng giá trị -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Tổng giá trị</h5>
+                <h3 class="text-success">
+                    @String.Format("{0:N0}", ViewBag.Sum) VND
+                </h3>
+            </div>
+        </div>
+
+        <!-- Tổng đơn -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Tổng đơn hàng</h5>
+                <h3 class="text-warning">@ViewBag.TotalOrder</h3>
+            </div>
+        </div>
+
+        <!-- Doanh thu hôm nay -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Doanh thu hôm nay</h5>
+                <h3 class="text-danger">
+                    @String.Format("{0:N0}", ViewBag.TodayRevenue) VND
+                </h3>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-4">
+        <a href="/Admin" class="btn btn-secondary">
+            ⬅ Quay lại
+        </a>
+    </div>
+
+</div>

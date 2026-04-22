@@ -1,0 +1,113 @@
+﻿@model QLBanHang_New.Models.Cart
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var list = Model?.CartItems ?? new List<QLBanHang_New.Models.CartItem>();
+    decimal total = list.Sum(x => x.Quantity * (x.Product?.Price ?? 0));
+}
+
+<div class="container mt-4">
+
+    <h2 class="fw-bold mb-3">🛒 Giỏ hàng</h2>
+
+    @if (!list.Any())
+    {
+        <div class="alert alert-info text-center">
+            Giỏ hàng trống
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0 p-3">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th style="width:150px;">Số lượng</th>
+                        <th>Tổng</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in list)
+                    {
+                        var price = item.Product?.Price ?? 0;
+                        var name = item.Product?.ProductName ?? "Không tên";
+                        var sum = item.Quantity * price;
+
+                        <tr>
+                            <td class="fw-semibold">@name</td>
+
+                            <td>@String.Format("{0:N0}", price) VND</td>
+
+                            <td>
+                                <form method="post" action="/Cart/Update" class="d-flex gap-2">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.CartItemId" />
+
+                                    <input type="number"
+                                           name="quantity"
+                                           value="@item.Quantity"
+                                           min="1"
+                                           class="form-control form-control-sm"
+                                           style="width:70px;" />
+
+                                    <button class="btn btn-sm btn-primary">✔</button>
+                                </form>
+                            </td>
+
+                            <td class="text-danger fw-bold">
+                                @String.Format("{0:N0}", sum) VND
+                            </td>
+
+                            <td>
+                                <form method="post" action="/Cart/Remove">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.CartItemId" />
+
+                                    <button class="btn btn-danger btn-sm">
+                                        🗑
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+                <!-- TOTAL -->
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold fs-5">
+                            Tổng tiền:
+                        </td>
+                        <td class="text-danger fw-bold fs-5">
+                            @String.Format("{0:N0}", total) VND
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+
+            </table>
+
+        </div>
+
+        <!-- BUTTON -->
+        <div class="mt-3 d-flex justify-content-between">
+
+            <a href="/Product" class="btn btn-outline-secondary">
+                ⬅ Tiếp tục mua
+            </a>
+
+            <a href="/Cart/Checkout" class="btn btn-success px-4">
+                💳 Tiến hành thanh toán
+            </a>
+
+        </div>
+    }
+
+</div>

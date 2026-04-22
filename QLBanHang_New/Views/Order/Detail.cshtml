@@ -1,0 +1,127 @@
+﻿@model List<QLBanHang_New.Models.OrderDetailViewModel>
+
+@using Microsoft.AspNetCore.Http
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var roleStr = Context.Session.GetString("Role");
+    int role = string.IsNullOrEmpty(roleStr) ? 999 : int.Parse(roleStr);
+
+    var order = ViewBag.Order as QLBanHang_New.Models.Order;
+
+    if (order == null)
+    {
+        <div class="alert alert-danger text-center mt-4">
+            ❌ Không tìm thấy đơn hàng
+        </div>
+        return;
+    }
+
+    var list = Model ?? new List<QLBanHang_New.Models.OrderDetailViewModel>();
+
+    decimal total = list.Sum(x => x.Price * x.Quantity);
+
+    // ===== BADGE STATUS =====
+    string status = order.Status ?? "Chưa xử lý";
+    string badge = "bg-secondary";
+
+    if (status == "Chờ xử lý")
+        badge = "bg-warning text-dark";
+    else if (status == "Đã xử lý")
+        badge = "bg-success";
+    else if (status == "Đã hủy")
+        badge = "bg-danger";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-3 fw-bold">📋 Chi tiết đơn hàng #@order.OrderId</h2>
+
+    <div class="mb-3">
+        <p><b>Khách hàng:</b> @order.User?.Username</p>
+        <p>
+            <b>Trạng thái:</b>
+            <span class="badge @badge px-3 py-2">
+                @status
+            </span>
+        </p>
+    </div>
+
+    @if (!list.Any())
+    {
+        <div class="alert alert-warning text-center">
+            Không có sản phẩm trong đơn hàng
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0 p-3">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Tổng</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in list)
+                    {
+                        <tr>
+                            <td>@(item.ProductName ?? "Không tên")</td>
+
+                            <td>@item.Quantity</td>
+
+                            <td>@String.Format("{0:N0}", item.Price) VND</td>
+
+                            <td class="text-danger fw-bold">
+                                @String.Format("{0:N0}", item.Price * item.Quantity) VND
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold">Tổng:</td>
+                        <td class="text-danger fw-bold">
+                            @String.Format("{0:N0}", total) VND
+                        </td>
+                    </tr>
+                </tfoot>
+
+            </table>
+
+        </div>
+    }
+
+    <!-- 🔥 ADMIN BUTTON -->
+    @if (role <= 2)
+    {
+        <div class="mt-3 d-flex gap-2">
+
+            <form asp-action="Approve" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@order.OrderId" />
+                <button class="btn btn-success px-4">✅ Duyệt</button>
+            </form>
+
+            <form asp-action="Cancel" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@order.OrderId" />
+                <button class="btn btn-danger px-4">❌ Hủy</button>
+            </form>
+
+        </div>
+    }
+
+    <a href="/Order" class="btn btn-outline-secondary mt-3">
+        ⬅ Quay lại
+    </a>
+
+</div>
