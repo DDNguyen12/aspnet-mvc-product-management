@@ -47,4 +47,4 @@ Update-Database
 
 ## 👨‍💻 Tác giả
 
-* Đinh Nguyên
+* Đinh Nguyễn Nguyên - [GitHub]
