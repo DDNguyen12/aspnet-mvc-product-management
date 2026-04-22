@@ -21,16 +21,18 @@ namespace QLBanHang_New.Controllers
         {
             if (!AuthHelper.IsLoggedIn(HttpContext)) return false;
             int role = AuthHelper.GetRole(HttpContext);
-            return role <= 2; // Admin + Chủ shop
+            return role <= 2;
         }
 
         // ================= DANH SÁCH (SEARCH + FILTER) =================
         public IActionResult Index(string search, int? categoryId)
         {
-            var products = _context.Products.AsQueryable();
+            var products = _context.Products
+                                   .AsNoTracking()
+                                   .AsQueryable();
 
             // 🔍 SEARCH
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrWhiteSpace(search))
             {
                 products = products.Where(p =>
                     (p.ProductName ?? "").Contains(search));
@@ -39,8 +41,13 @@ namespace QLBanHang_New.Controllers
             // 🎯 FILTER CATEGORY
             if (categoryId.HasValue && categoryId > 0)
             {
-                products = products.Where(p => p.CategoryId == categoryId);
+                products = products.Where(p => p.CategoryId == categoryId.Value);
             }
+
+            // 🔥 LOAD CATEGORY (QUAN TRỌNG)
+            ViewBag.Categories = _context.Categories
+                                        .AsNoTracking()
+                                        .ToList();
 
             return View(products.ToList());
         }
@@ -49,7 +56,8 @@ namespace QLBanHang_New.Controllers
         public IActionResult Detail(int id)
         {
             var product = _context.Products
-                .FirstOrDefault(p => p.ProductId == id);
+                                  .AsNoTracking()
+                                  .FirstOrDefault(p => p.ProductId == id);
 
             if (product == null)
                 return NotFound();
@@ -63,6 +71,9 @@ namespace QLBanHang_New.Controllers
             if (!IsStaff())
                 return RedirectToAction("Login", "Auth");
 
+            // 🔥 load category cho dropdown
+            ViewBag.Categories = _context.Categories.ToList();
+
             return View();
         }
 
@@ -74,7 +85,10 @@ namespace QLBanHang_New.Controllers
                 return RedirectToAction("Login", "Auth");
 
             if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = _context.Categories.ToList();
                 return View(p);
+            }
 
             _context.Products.Add(p);
             _context.SaveChanges();
@@ -93,6 +107,9 @@ namespace QLBanHang_New.Controllers
             if (product == null)
                 return NotFound();
 
+            // 🔥 load category
+            ViewBag.Categories = _context.Categories.ToList();
+
             return View(product);
         }
 
@@ -104,10 +121,13 @@ namespace QLBanHang_New.Controllers
                 return RedirectToAction("Login", "Auth");
 
             if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = _context.Categories.ToList();
                 return View(p);
+            }
 
             var existing = _context.Products
-                .FirstOrDefault(x => x.ProductId == p.ProductId);
+                                   .FirstOrDefault(x => x.ProductId == p.ProductId);
 
             if (existing == null)
                 return NotFound();
