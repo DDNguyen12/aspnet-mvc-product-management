@@ -65,7 +65,7 @@
                                 @String.Format("{0:N0}", item.TotalAmount) VND
                             </td>
 
-                            <!-- 🔥 PAYMENT -->
+                            <!-- PAYMENT -->
                             <td>
                                 <span class="badge bg-info text-dark">
                                     @payment
@@ -88,7 +88,7 @@
                                     🔍
                                 </a>
 
-                                <!-- 🔥 ADMIN DUYỆT -->
+                                <!-- ADMIN DUYỆT -->
                                 @if (role <= 2 && status == "Chờ xử lý")
                                 {
                                     <form method="post" action="/Order/Approve">

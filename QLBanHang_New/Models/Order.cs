@@ -13,15 +13,15 @@ namespace QLBanHang_New.Models
 
         public decimal TotalAmount { get; set; }
 
-        // 🔥 TRẠNG THÁI ĐƠN
-        // Chờ xử lý | Đã xử lý | Đã hủy
+        // TRẠNG THÁI ĐƠN
+        // Chờ xử lý Đã xử lý Đã hủy
         public string? Status { get; set; }
 
-        // 🔥 PHƯƠNG THỨC THANH TOÁN (QUAN TRỌNG)
+        // PHƯƠNG THỨC THANH TOÁN 
         // COD | QR
         public string? PaymentMethod { get; set; }
 
-        // ===== RELATION =====
+        // RELATION 
         public User? User { get; set; }
 
         public ICollection<OrderDetail>? OrderDetails { get; set; }

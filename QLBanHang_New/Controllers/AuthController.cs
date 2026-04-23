@@ -12,7 +12,7 @@ public class AuthController : Controller
         _context = context;
     }
 
-    // ===== LOGIN =====
+    // LOGIN
     public IActionResult Login()
     {
         return View();
@@ -26,7 +26,7 @@ public class AuthController : Controller
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
             ViewBag.Error = "Vui lòng nhập đầy đủ thông tin";
-            ViewBag.Username = username; // 🔥 giữ lại input
+            ViewBag.Username = username; 
             return View();
         }
 
@@ -38,7 +38,7 @@ public class AuthController : Controller
         if (user == null)
         {
             ViewBag.Error = "Sai tài khoản hoặc mật khẩu";
-            ViewBag.Username = username; // 🔥 giữ lại input
+            ViewBag.Username = username; 
             return View();
         }
 
@@ -49,7 +49,7 @@ public class AuthController : Controller
         return RedirectToAction("Index", "Product");
     }
 
-    // ===== REGISTER =====
+    //REGISTER 
     public IActionResult Register()
     {
         return View();
@@ -89,7 +89,7 @@ public class AuthController : Controller
         return RedirectToAction("Login");
     }
 
-    // ===== LOGOUT =====
+    //LOGOUT
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();

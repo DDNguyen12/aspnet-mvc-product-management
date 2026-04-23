@@ -10,7 +10,7 @@ namespace QLBanHang_New.Data
         {
         }
 
-        // ===== TABLES =====
+        // TABLES
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -20,13 +20,13 @@ namespace QLBanHang_New.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
-        // 🔥 THÊM MẤY BẢNG BẠN ĐÃ CÓ TRONG DB
+        // THÊM MẤY BẢNG BẠN ĐÃ CÓ TRONG DB
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Log> Logs { get; set; }
 
-        // ===== CONFIG RELATION =====
+        // CONFIG RELATION 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

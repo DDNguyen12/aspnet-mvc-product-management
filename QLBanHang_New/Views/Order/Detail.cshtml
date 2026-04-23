@@ -22,7 +22,7 @@
 
     decimal total = list.Sum(x => x.Price * x.Quantity);
 
-    // ===== BADGE STATUS =====
+    // BADGE STATUS 
     string status = order.Status ?? "Chưa xử lý";
     string badge = "bg-secondary";
 
@@ -100,7 +100,7 @@
         </div>
     }
 
-    <!-- 🔥 ADMIN BUTTON -->
+    <!-- ADMIN BUTTON -->
     @if (role <= 2)
     {
         <div class="mt-3 d-flex gap-2">

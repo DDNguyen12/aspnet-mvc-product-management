@@ -9,7 +9,7 @@ public static class TokenStore
     {
         var token = Guid.NewGuid().ToString();
 
-        Tokens[token] = DateTime.Now.AddMinutes(5); // hết hạn 5 phút
+        Tokens[token] = DateTime.Now.AddMinutes(5); // hết hạn sau 5 phút
 
         return token;
     }

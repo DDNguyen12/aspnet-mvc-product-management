@@ -13,7 +13,7 @@ public class OrderController : Controller
         _context = context;
     }
 
-    // ===== ROLE =====
+    //ROLE
     private int GetRole()
     {
         return AuthHelper.GetRole(HttpContext);
@@ -21,15 +21,15 @@ public class OrderController : Controller
 
     private bool IsStaff()
     {
-        return GetRole() <= 3; // admin + owner + nv
+        return GetRole() <= 3;
     }
 
     private bool IsAdmin()
     {
-        return GetRole() <= 2; // admin + owner
+        return GetRole() <= 2; 
     }
 
-    // ================= DANH SÁCH =================
+    // DANH SÁCH
     public IActionResult Index()
     {
         if (!IsStaff())
@@ -43,7 +43,7 @@ public class OrderController : Controller
         return View(orders);
     }
 
-    // ================= CHI TIẾT =================
+    // CHI TIẾT
     public IActionResult Detail(int id)
     {
         if (!IsStaff())
@@ -74,7 +74,7 @@ public class OrderController : Controller
         return View(details);
     }
 
-    // ================= DUYỆT =================
+    // DUYỆT
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Approve(int id)
@@ -93,7 +93,7 @@ public class OrderController : Controller
         return RedirectToAction("Index");
     }
 
-    // ================= HỦY =================
+    // HỦY
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Cancel(int id)

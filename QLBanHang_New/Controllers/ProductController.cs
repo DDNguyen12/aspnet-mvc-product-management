@@ -16,7 +16,7 @@ namespace QLBanHang_New.Controllers
             _context = context;
         }
 
-        // ===== CHECK ROLE =====
+        // CHECK ROLE
         private bool IsStaff()
         {
             if (!AuthHelper.IsLoggedIn(HttpContext)) return false;
@@ -24,27 +24,27 @@ namespace QLBanHang_New.Controllers
             return role <= 2;
         }
 
-        // ================= DANH SÁCH (SEARCH + FILTER) =================
+        //DANH SÁCH
         public IActionResult Index(string search, int? categoryId)
         {
             var products = _context.Products
                                    .AsNoTracking()
                                    .AsQueryable();
 
-            // 🔍 SEARCH
+            // SEARCH
             if (!string.IsNullOrWhiteSpace(search))
             {
                 products = products.Where(p =>
                     (p.ProductName ?? "").Contains(search));
             }
 
-            // 🎯 FILTER CATEGORY
+            // CATEGORY
             if (categoryId.HasValue && categoryId > 0)
             {
                 products = products.Where(p => p.CategoryId == categoryId.Value);
             }
 
-            // 🔥 LOAD CATEGORY (QUAN TRỌNG)
+            //LOAD CATEGORY 
             ViewBag.Categories = _context.Categories
                                         .AsNoTracking()
                                         .ToList();
@@ -52,7 +52,7 @@ namespace QLBanHang_New.Controllers
             return View(products.ToList());
         }
 
-        // ================= CHI TIẾT =================
+        // CHI TIẾT
         public IActionResult Detail(int id)
         {
             var product = _context.Products
@@ -65,13 +65,13 @@ namespace QLBanHang_New.Controllers
             return View(product);
         }
 
-        // ================= CREATE =================
+        // CREATE
         public IActionResult Create()
         {
             if (!IsStaff())
                 return RedirectToAction("Login", "Auth");
 
-            // 🔥 load category cho dropdown
+            // load category 
             ViewBag.Categories = _context.Categories.ToList();
 
             return View();
@@ -96,7 +96,7 @@ namespace QLBanHang_New.Controllers
             return RedirectToAction("Index");
         }
 
-        // ================= EDIT =================
+        // EDIT
         public IActionResult Edit(int id)
         {
             if (!IsStaff())
@@ -107,7 +107,7 @@ namespace QLBanHang_New.Controllers
             if (product == null)
                 return NotFound();
 
-            // 🔥 load category
+            // load category
             ViewBag.Categories = _context.Categories.ToList();
 
             return View(product);
@@ -145,7 +145,7 @@ namespace QLBanHang_New.Controllers
             return RedirectToAction("Index");
         }
 
-        // ================= DELETE =================
+        // DELETE
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)

@@ -17,14 +17,14 @@ public class AdminController : Controller
         _context = context;
     }
 
-    // ===== CHECK ROLE =====
+    //  CHECK ROLE 
     private bool CheckAdmin()
     {
         int role = AuthHelper.GetRole(HttpContext);
         return role == 1;
     }
 
-    // ===== INDEX =====
+    //  INDEX 
     public IActionResult Index(string search)
     {
         if (!CheckAdmin())
@@ -41,7 +41,7 @@ public class AdminController : Controller
         return View(products.ToList());
     }
 
-    // ================= CREATE =================
+    // CREATE 
 
     // GET CREATE
     public IActionResult Create()
@@ -61,7 +61,7 @@ public class AdminController : Controller
         if (!CheckAdmin())
             return RedirectToAction("Login", "Auth");
 
-        // ===== CATEGORY =====
+        // CATEGORY 
         if (!string.IsNullOrWhiteSpace(NewCategory))
         {
             var cat = new Category { CategoryName = NewCategory };
@@ -81,7 +81,7 @@ public class AdminController : Controller
             }
         }
 
-        // ===== IMAGE =====
+        // IMAGE 
         if (imageFile != null && imageFile.Length > 0)
         {
             var fileName = Path.GetFileName(imageFile.FileName);
@@ -100,14 +100,14 @@ public class AdminController : Controller
             p.ImageUrl = fileName;
         }
 
-        // ===== SAVE =====
+        // SAVE 
         _context.Products.Add(p);
         _context.SaveChanges();
 
         return RedirectToAction("Index");
     }
 
-    // ================= EDIT =================
+    // EDIT
 
     // GET EDIT
     public IActionResult Edit(int id)
@@ -135,7 +135,7 @@ public class AdminController : Controller
         if (existing == null)
             return NotFound();
 
-        // ===== CATEGORY =====
+        // CATEGORY 
         if (!string.IsNullOrWhiteSpace(NewCategory))
         {
             var cat = new Category { CategoryName = NewCategory };
@@ -157,13 +157,13 @@ public class AdminController : Controller
             existing.CategoryId = p.CategoryId;
         }
 
-        // ===== UPDATE =====
+        // UPDATE
         existing.ProductName = p.ProductName;
         existing.Price = p.Price;
         existing.Stock = p.Stock;
         existing.Description = p.Description;
 
-        // ===== IMAGE =====
+        // IMAGE 
         if (imageFile != null && imageFile.Length > 0)
         {
             var fileName = Path.GetFileName(imageFile.FileName);
@@ -187,7 +187,7 @@ public class AdminController : Controller
         return RedirectToAction("Index");
     }
 
-    // ================= DELETE =================
+    // DELETE
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Delete(int id)
@@ -206,7 +206,7 @@ public class AdminController : Controller
         return RedirectToAction("Index");
     }
 
-    // ================= EXPORT EXCEL =================
+    //EXPORT EXCEL
     public IActionResult ExportExcel()
     {
         if (!CheckAdmin())
@@ -246,7 +246,7 @@ public class AdminController : Controller
         }
     }
 
-    // ================= THỐNG KÊ =================
+    // THỐNG KÊ
     public IActionResult ThongKe()
     {
         if (!CheckAdmin())
@@ -262,7 +262,7 @@ public class AdminController : Controller
         return View();
     }
 
-    // ===== LOAD DROPDOWN =====
+    //LOAD DROPDOWN
     private void LoadCategoryDropdown()
     {
         ViewBag.Categories = new SelectList(

@@ -12,7 +12,7 @@ public class CartController : Controller
         _context = context;
     }
 
-    // ===== LẤY USER ID =====
+    //LẤY USER ID
     private int GetUserId()
     {
         var user = HttpContext.Session.GetString("User");
@@ -22,7 +22,7 @@ public class CartController : Controller
         return u?.UserId ?? -1;
     }
 
-    // ===== GIỎ HÀNG =====
+    //GIỎ HÀNG
     public IActionResult Index()
     {
         int userId = GetUserId();
@@ -46,7 +46,7 @@ public class CartController : Controller
         return View(cart);
     }
 
-    // ===== THÊM GIỎ =====
+    //THÊM GIỎ
     public IActionResult Add(int id)
     {
         int userId = GetUserId();
@@ -88,7 +88,7 @@ public class CartController : Controller
         return RedirectToAction("Index");
     }
 
-    // ===== XÓA =====
+    // XÓA
     [HttpPost]
     public IActionResult Remove(int id)
     {
@@ -102,7 +102,7 @@ public class CartController : Controller
         return RedirectToAction("Index");
     }
 
-    // ===== UPDATE =====
+    //UPDATE 
     [HttpPost]
     public IActionResult Update(int id, int quantity)
     {
@@ -117,7 +117,7 @@ public class CartController : Controller
         return RedirectToAction("Index");
     }
 
-    // ===== CHECKOUT VIEW =====
+    //CHECKOUT VIEW
     public IActionResult Checkout()
     {
         int userId = GetUserId();
@@ -135,7 +135,7 @@ public class CartController : Controller
         return View(cart);
     }
 
-    // ===== CHECKOUT POST (QUAN TRỌNG NHẤT) =====
+    //CHECKOUT POST 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Checkout(string paymentMethod)
@@ -155,7 +155,7 @@ public class CartController : Controller
         decimal total = cart.CartItems
             .Sum(x => x.Quantity * (x.Product?.Price ?? 0));
 
-        // 🔥 LOGIC QUAN TRỌNG
+
         string status = paymentMethod == "QR" ? "Đã xử lý" : "Chờ xử lý";
 
         var order = new Order
@@ -164,7 +164,7 @@ public class CartController : Controller
             OrderDate = DateTime.Now,
             TotalAmount = total,
             Status = status,
-            PaymentMethod = paymentMethod // 🔥 QUAN TRỌNG
+            PaymentMethod = paymentMethod 
         };
 
         _context.Orders.Add(order);
@@ -187,13 +187,13 @@ public class CartController : Controller
         return RedirectToAction("Success");
     }
 
-    // ===== SUCCESS =====
+    //  SUCCESS 
     public IActionResult Success()
     {
         return View();
     }
 
-    // ===== QR =====
+    // QR
     public IActionResult GenerateQR()
     {
         var token = Guid.NewGuid().ToString();
